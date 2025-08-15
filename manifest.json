@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "PDF to Word Converter",
+  "version": "1.0",
+  "description": "Convert PDF files to Word documents directly in the browser.",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "PDF to Word"
+  },
+  "permissions": ["storage"],
+  "web_accessible_resources": [{
+    "resources": ["lib/pdf.worker.min.js"],
+    "matches": ["<all_urls>"]
+  }]
+}
