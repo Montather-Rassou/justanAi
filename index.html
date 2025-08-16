@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>HR Management System</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    form input { margin-right: 0.5em; }
+    table { width: 100%; border-collapse: collapse; margin-top: 1em; }
+    th, td { border: 1px solid #ccc; padding: 0.5em; text-align: left; }
+    th { background: #eee; }
+    button { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>HR Management System</h1>
+  <form id="employee-form">
+    <input id="name" name="name" placeholder="Name" required />
+    <input id="department" name="department" placeholder="Department" required />
+    <input id="position" name="position" placeholder="Position" required />
+    <button type="submit">Add Employee</button>
+  </form>
+
+  <table id="employee-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Position</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById('employee-form');
+    const tableBody = document.querySelector('#employee-table tbody');
+    let employees = JSON.parse(localStorage.getItem('employees') || '[]');
+
+    function render() {
+      tableBody.innerHTML = '';
+      employees.forEach((emp, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${emp.name}</td>
+          <td>${emp.department}</td>
+          <td>${emp.position}</td>
+          <td><button data-index="${index}" class="delete">Delete</button></td>`;
+        tableBody.appendChild(row);
+      });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const newEmployee = {
+        name: form.name.value.trim(),
+        department: form.department.value.trim(),
+        position: form.position.value.trim(),
+      };
+      employees.push(newEmployee);
+      localStorage.setItem('employees', JSON.stringify(employees));
+      form.reset();
+      render();
+    });
+
+    tableBody.addEventListener('click', (e) => {
+      if (e.target.classList.contains('delete')) {
+        const index = e.target.dataset.index;
+        employees.splice(index, 1);
+        localStorage.setItem('employees', JSON.stringify(employees));
+        render();
+      }
+    });
+
+    render();
+  </script>
+</body>
+</html>
